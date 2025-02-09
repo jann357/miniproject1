@@ -197,6 +197,9 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
                 data: {
                     name: user.name,
                     email: user.email,
+                    
+                
+
                 },
             });
         }
