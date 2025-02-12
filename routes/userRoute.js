@@ -1,6 +1,9 @@
 const express = require('express');
 const cors = require('cors');
 const router = express.Router();
+// const Prescription = require('./models/prescriptionModel');
+// const Medicine = require('./models/medicineModel'); 
+
 const User = require('../models/userModel');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -10,6 +13,7 @@ app.use(cors());
 app.use(express.json());
 const authMiddleware = require('../middlewares/authMiddleware');
 router.post('/register', async (req, res)=>{
+    const { name, email, phoneNumber, website, address, specialization, hospital,password } = req.body;
     try {
         const userExists = await User.findOne({email: req.body.email});
         if(userExists){
@@ -20,7 +24,16 @@ router.post('/register', async (req, res)=>{
        const salt = await bcrypt.genSalt(10);
        const hashedPassword = await bcrypt.hash(password, salt);
        req.body.password = hashedPassword;
-       const newuser = new User(req.body);
+       const newuser = new User({
+        name,
+        email,
+        phoneNumber,
+        website,
+        address,
+        specialization,
+        hospital,
+        password:hashedPassword,
+       });
        await newuser.save();
        res.status(200).send({message:'user craeted successfully',success:true});
     }
@@ -186,6 +199,7 @@ router.post('/login',cors(), async (req, res) => {
 router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
     try {
         const user = await User.findOne({ _id: req.body.userId });
+        console.log(user); 
         if (!user) {
             return res.status(200).send({
                 message: 'User does not exist',
@@ -197,9 +211,10 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
                 data: {
                     name: user.name,
                     email: user.email,
-                    
-                
-
+                    phoneNumber: user.phoneNumber,
+                    website: user.website,
+                    address: user.address,
+                    specialization: user.specialization,
                 },
             });
         }
@@ -211,6 +226,10 @@ router.post('/get-user-info-by-id', authMiddleware, async (req, res) => {
         });
     }
 });
+
+
+
+
 
 
 // app.use('/api/user', router);
