@@ -1,33 +1,21 @@
 const mongoose = require('mongoose');
 
-// Prescription Schema in MongoDB
 const prescriptionSchema = new mongoose.Schema({
-  patientDetails: {
-    name: { type: String, required: true },
-    age: { type: String, required: true },
-    gender: { type: String, required: true },
-    contact: { type: String, required: true },
-    patientID: { type: String, required: true },
-    allergies: { type: String, default: '' },
-  },
-  // Linking doctorDetails to the users collection (doctor)
-  doctorDetails: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'users',  // This will reference the users collection
-    required: true,
-  },
-  diagnosis: { type: String, required: true },
-  medications: [
-    {
-      medicine: { type: mongoose.Schema.Types.ObjectId, ref: 'Medicine', required: true },  // Reference to the Medicine schema
-      dosage: { type: String, required: true },  // Dosage instructions
-      quantity: { type: Number, required: true },  // Quantity prescribed
-      price: { type: Number, required: true },  // Total price for the medication (calculated on the frontend)
-    }
-  ],
-  qrCodeUrl: { type: String, default: '' },  // URL of the QR code generated for the prescription
+  patientId: { type: String, required: true },
+  doctorId: { type: String,required: true },
+  medicines: [{
+    medicineId: { type: mongoose.Schema.Types.ObjectId, ref: 'medicines', required: true },
+    name:{type: String, required: true },
+    dosage: { type: String, required: true },
+    shift: { type: String, required: true },
+    price: { type: Number, required: true },
+  }],
+  totalCost: { type: Number, required: true },
+  qrCodeData: { type: String, required: true}, // Can be a string representing QR code data or a link to an image
 }, { timestamps: true });
 
 const Prescription = mongoose.model('Prescription', prescriptionSchema);
 module.exports = Prescription;
+
+
 

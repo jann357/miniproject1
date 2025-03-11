@@ -5,13 +5,17 @@ const cors = require('cors');
 const app= express();
 require('dotenv').config()
 const db = require("./config/db");
-
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true })); 
 const userRoute = require('./routes/userRoute');
 app.use('/api/user',userRoute);
-const medicineRoute = require('./routes/medicineRoute');
-app.use('/api/', medicineRoute);
+const prescriptionRoutes = require('./routes/prescriptionRoute'); // import the routes
+app.use('/api/prescription', prescriptionRoutes);
+const medicineRoutes = require('./routes/medicineRoute');
+app.use('/api/medicine', medicineRoutes);
+const patientRoutes = require('./routes/patientRoute');
+app.use('/api/patient', patientRoutes);
 const port = process.env.PORT || 5000;
 
 app.use(cors({

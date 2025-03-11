@@ -6,6 +6,7 @@ import Register from './pages/Register';
 // import Dashboard from './pages/Home'
 import { Toaster } from 'react-hot-toast';
 import Home from './pages/Home';
+import LandingPage from './pages/LandingPage';
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
   }}
 />
   <Routes>
+  <Route path="/" element={<LandingPage />} />
     <Route path='/login' element={<Login/>}/>
     <Route path='/register' element={<Register/>}/>
     <Route path='/home' element={<Home/>}/>
